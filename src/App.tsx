@@ -1,43 +1,34 @@
-import React, { useState } from 'react'
-import logo from './logo.svg'
+import React from 'react'
+import { Responsive, WidthProvider } from 'react-grid-layout'
+
+import DashboardPanel from './components/DashboardPanel'
+
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const ResponsiveGridLayout = WidthProvider(Responsive)
 
+function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
+        <h1>se-ds-dashboard</h1>
       </header>
+      <div className="App-dashboard">
+        <ResponsiveGridLayout
+          className="-dashboard-layout"
+          breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
+          cols={{lg: 6, md: 4, sm: 2, xs: 1, xxs: 1}}
+          compactType="horizontal"
+          isResizable
+        >
+          <DashboardPanel className="dashboard-panel" key="1">1</DashboardPanel>
+          <DashboardPanel className="dashboard-panel" key="2">2</DashboardPanel>
+          <DashboardPanel className="dashboard-panel" key="3">3</DashboardPanel>
+          <DashboardPanel className="dashboard-panel" key="4">4</DashboardPanel>
+          <DashboardPanel className="dashboard-panel" key="5">5</DashboardPanel>
+          <DashboardPanel className="dashboard-panel" key="6">6</DashboardPanel>
+        </ResponsiveGridLayout>
+      </div>
     </div>
   )
 }
