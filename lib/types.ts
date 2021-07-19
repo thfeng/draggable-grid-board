@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { CSSProperties, ReactElement } from 'react';
 import { Layout, ItemCallback } from 'react-grid-layout'
 
 export type LayoutItem = {
@@ -152,13 +152,20 @@ export interface GridBoardProps {
 
 export interface PanelProps {
   className?: string
+  style?: CSSProperties
   key: string
   posX: number
   posY: number
   width: number
   height: number
+  header?: string | ReactElement
+  footer?: string | ReactElement
 }
 
 export interface PanelHeaderProps {
+  className?: string
+}
+
+export interface PanelFooterProps {
   className?: string
 }

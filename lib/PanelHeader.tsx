@@ -6,12 +6,13 @@ const componentClassName = 'se-ds-draggable-grid-board-panel-header'
 
 const PanelHeader: React.FC<PanelHeaderProps> = (props) => {
   const {
-    className
+    className,
+    children
   } = props
   
   return (
     <div className={`${componentClassName} ${className}`}>
-      this is header
+      {children}
     </div>
   )
 }
