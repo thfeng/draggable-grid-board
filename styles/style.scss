@@ -1,0 +1,27 @@
+.se-ds-draggable-grid-board {
+  width: 100%;
+
+  &-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    box-shadow: 1px 1px 25px 0 #dbdbdb;
+
+    &-header {
+      padding: 6px 10px;
+      border-bottom: 1px solid #dbdbdb;
+    }
+
+    &-content {
+      flex: 1;
+      padding: 6px 10px;
+      overflow: auto;
+    }
+
+    &-footer {
+      padding: 6px 10px;
+      border-top: 1px solid #dbdbdb;
+    }
+  }
+}

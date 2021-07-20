@@ -1,14 +1,16 @@
 import React from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
+import { Panel } from '.'
 
 import { GridBoardProps } from './types'
+import { ClassNames, CompnentName, isNullOrUndefined } from './utils'
 
 const DefaultGridBoardProps = {
   breakpoints: {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0},
   cols: {lg: 6, md: 4, sm: 2, xs: 1, xxs: 1},
   draggableCancel: '',
   draggableHandle: '',
-  compactType: 'vertical',
+  compactType: 'horizontal',
   margin: [10, 10],
   containerPadding: [10, 10],
   rowHeight: 150,
@@ -21,7 +23,7 @@ const DefaultGridBoardProps = {
   resizeHandle: null,
   onLayoutChange: () => {},
   onDragStart: () => {},
-  onDrag: () => {},
+  onDrag: (layout) => {console.log(layout)},
   onDragStop: () => {},
   onResizeStart: () => {},
   onResize: () => {},
@@ -35,12 +37,67 @@ const ResponsiveGridLayout = WidthProvider(Responsive)
 
 const GridBoard: React.FC<GridBoardProps> = (props) => {
   const layoutProps = Object.assign(DefaultGridBoardProps, props)
+  
+  const validateChild = (child) => {
+    const {
+      key,
+      props: {
+        posX,
+        posY,
+        width,
+        height,
+      },
+      type: {
+        displayName
+      }
+    } = child
+    if (displayName !== CompnentName.panel) {
+      return false
+    }
+    if (isNullOrUndefined(key) || isNullOrUndefined(posX) || isNullOrUndefined(posY) || isNullOrUndefined(width) || isNullOrUndefined(height)) {
+      return false
+    }
+
+    return true
+  }
+
+  const processItems = (child) => {
+
+    if(!validateChild(child)) return null
+
+    const {
+      props: {
+        posX,
+        posY,
+        width,
+        height,
+        ...restProps
+      },
+      key
+    } = child
+    const dataGrid = {
+      x: posX,
+      y: posY,
+      w: width,
+      h: height,
+      minH: height,
+    }
+    return (
+      <div key={key} data-grid={dataGrid}>
+        <Panel {...restProps} />
+      </div>
+    )
+  }
 
   return (
     <ResponsiveGridLayout
       {...layoutProps}
       className={`${componentClassName} ${layoutProps.className}`}
-    />
+    >
+      {
+        React.Children.map(props.children, child => processItems(child))
+      }
+    </ResponsiveGridLayout>
   )
 }
 

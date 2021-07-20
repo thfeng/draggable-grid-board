@@ -1,8 +1,9 @@
 import React from 'react'
 
 import { PanelHeaderProps } from './types'
+import { ClassNames } from './utils'
 
-const componentClassName = 'se-ds-draggable-grid-board-panel-header'
+const componentClassName = ClassNames.panelHeader
 
 const PanelHeader: React.FC<PanelHeaderProps> = (props) => {
   const {
@@ -12,7 +13,7 @@ const PanelHeader: React.FC<PanelHeaderProps> = (props) => {
   
   return (
     <div className={`${componentClassName} ${className}`}>
-      {children}
+      <h2>{children}</h2>
     </div>
   )
 }

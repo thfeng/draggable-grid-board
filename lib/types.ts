@@ -153,11 +153,11 @@ export interface GridBoardProps {
 export interface PanelProps {
   className?: string
   style?: CSSProperties
-  key: string
-  posX: number
-  posY: number
-  width: number
-  height: number
+  // key: string
+  // posX: number
+  // posY: number
+  // width: number
+  // height: number
   header?: string | ReactElement
   footer?: string | ReactElement
 }

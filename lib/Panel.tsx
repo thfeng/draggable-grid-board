@@ -1,51 +1,45 @@
 import React from 'react'
 
 import { PanelProps } from './types'
+import { ClassNames, CompnentName } from './utils'
 import PanelHeader from './PanelHeader'
 import PanelFooter from './PanelFooter'
 
-const componentClassName = 'se-ds-draggable-grid-board-panel'
+const panelClassName = ClassNames.panel
+const panelContentClassName = ClassNames.panelContent
+const draggableHandleClassName = ClassNames.draggableHandle
 
-const PanelRef: React.ForwardRefExoticComponent<PanelProps> = React.forwardRef<HTMLDivElement, PanelProps>((props, ref) => {
+const Panel: React.FC<PanelProps> = (props) => {
 
   const {
     style,
     className,
-    key,
-    posX,
-    posY,
-    width,
-    height,
     header,
     footer,
     children
   } = props
 
   const HeaderComponent = typeof header === 'string' ? null : header
-
-  const dataGrid = {
-    i: key,
-    x: posX,
-    y: posY,
-    w: width,
-    h: height,
-  }
+  const FooterComponent = typeof footer === 'string' ? null : footer
 
   return (
     <div
-      className={`${componentClassName} ${className}`}
-      style={style}
-      key={key}
-      data-grid={dataGrid}
-      ref={ref}
+      className={`${panelClassName} ${draggableHandleClassName} ${className}`}
+      style={{height: '100%', ...style}}
     >
       {
-        header && HeaderComponent !== null ? <HeaderComponent /> : <PanelHeader>{header}</PanelHeader>
+        header && (HeaderComponent !== null ? {children} : <PanelHeader>{header}</PanelHeader>)
       }
-      {children}
-      <PanelFooter />
+      <div className={`${panelContentClassName}`}>
+        {children}
+      </div>
+      {
+        footer && (FooterComponent !== null ? {children} : <PanelFooter>{footer}</PanelFooter>)
+      }
     </div>
   )
-})
+}
 
-export default PanelRef
+Panel.displayName = CompnentName.panel
+
+export default Panel
