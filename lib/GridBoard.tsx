@@ -3,7 +3,7 @@ import { Responsive, WidthProvider } from 'react-grid-layout'
 import { Panel } from '.'
 
 import { GridBoardProps } from './types'
-import { ClassNames, CompnentName, isNullOrUndefined } from './utils'
+import { CompnentName, isNullOrUndefined } from './utils'
 
 const DefaultGridBoardProps = {
   breakpoints: {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0},
@@ -71,6 +71,10 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
         posY,
         width,
         height,
+        minHeight = 1,
+        minWidth = 1,
+        isDraggable = true,
+        isResizable = true,
         ...restProps
       },
       key
@@ -80,7 +84,10 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
       y: posY,
       w: width,
       h: height,
-      minH: height,
+      minH: minHeight,
+      minW: minWidth,
+      isDraggable,
+      isResizable
     }
     return (
       <div key={key} data-grid={dataGrid}>

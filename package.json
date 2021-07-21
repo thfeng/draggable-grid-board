@@ -1,8 +1,20 @@
 {
+  "name": "@se-ds/draggable-grid-board",
   "version": "0.0.1-alpha",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/draggable-grid-board.umd.js",
+  "module": "./dist/draggable-grid-board.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/draggable-grid-board.es.js",
+      "require": "./dist/draggable-grid-board.umd.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "serve": "vite preview"
   },
   "dependencies": {

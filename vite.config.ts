@@ -4,6 +4,21 @@ import reactRefresh from '@vitejs/plugin-react-refresh'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    lib: {
+      entry: path.resolve(__dirname, 'lib/index.ts'),
+      name: 'DraggableGridBoard'
+    },
+    rollupOptions: {
+      external: ['react', 'react-dom'],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDom'
+        }
+      }
+    }
+  },
   plugins: [reactRefresh()],
   resolve: {
     alias: {
