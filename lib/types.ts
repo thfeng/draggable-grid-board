@@ -1,5 +1,5 @@
 import { CSSProperties, ReactElement } from 'react';
-import { Layout, ItemCallback } from 'react-grid-layout'
+import { Layout, ItemCallback, Layouts } from 'react-grid-layout'
 
 export type LayoutItem = {
   w: number,
@@ -61,7 +61,10 @@ export interface GridBoardProps {
   draggableHandle: string,
 
   // Compaction type.
-  compactType: "vertical" | "horizontal";
+  compactType: "vertical" | "horizontal",
+
+  // If true, the container height swells and contracts to fit contents
+  autoSize: boolean,
 
   // Margin between items [x, y] in px.
   margin: [number, number],
@@ -118,7 +121,7 @@ export interface GridBoardProps {
 
   // Callback so you can save the layout.
   // Calls back with (currentLayout) after every drag or resize stop.
-  onLayoutChange: (layout: Layout) => void,
+  onLayoutChange: (currentLayout: Layout[], allLayouts: Layouts) => void,
 
   //
   // All callbacks below have signature (layout, oldItem, newItem, placeholder, e, element).
@@ -144,10 +147,6 @@ export interface GridBoardProps {
 
   // Calls when an element has been dropped into the grid from outside.
   onDrop: (layout: Layout, item: LayoutItem, e: Event) => void
-
-  // Ref for getting a reference for the grid's wrapping div.
-  // You can use this instead of a regular ref and the deprecated `ReactDOM.findDOMNode()`` function.
-  innerRef: React.Ref<"div">
 }
 
 export interface PanelProps {

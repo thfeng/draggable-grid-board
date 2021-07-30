@@ -1,18 +1,20 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Responsive, WidthProvider } from 'react-grid-layout'
 import { Panel } from '.'
 
 import { GridBoardProps } from './types'
 import { CompnentName, isNullOrUndefined } from './utils'
 
-const DefaultGridBoardProps = {
+const DefaultGridBoardProps: GridBoardProps = {
+  className: '',
   breakpoints: {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0},
   cols: {lg: 6, md: 4, sm: 2, xs: 1, xxs: 1},
   draggableCancel: '',
   draggableHandle: '',
-  compactType: 'horizontal',
+  compactType: 'vertical',
   margin: [10, 10],
   containerPadding: [10, 10],
+  autoSize: true,
   rowHeight: 150,
   isDraggable: true,
   isResizable: true,
@@ -23,10 +25,17 @@ const DefaultGridBoardProps = {
   resizeHandle: null,
   onLayoutChange: () => {},
   onDragStart: () => {},
-  onDrag: (layout) => {console.log(layout)},
+  onDrag: () => {},
   onDragStop: () => {},
   onResizeStart: () => {},
-  onResize: () => {},
+  onResize: (layout,
+    oldItem,
+    newItem,
+    placeholder,
+    event,
+    element) => {
+      console.log(layout, oldItem, newItem, placeholder, event, element)
+    },
   onResizeStop: () => {},
   onDrop: () => {},
 }
@@ -80,6 +89,7 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
       key
     } = child
     const dataGrid = {
+      i: key,
       x: posX,
       y: posY,
       w: width,
@@ -96,13 +106,18 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
     )
   }
 
+  const renderPanels = (children: ReactNode):ReactNode[] => {
+    return React.Children.map(children, child => processItems(child))
+  }
+
   return (
     <ResponsiveGridLayout
+      measureBeforeMount
       {...layoutProps}
       className={`${componentClassName} ${layoutProps.className}`}
     >
       {
-        React.Children.map(props.children, child => processItems(child))
+        renderPanels(props.children)
       }
     </ResponsiveGridLayout>
   )
