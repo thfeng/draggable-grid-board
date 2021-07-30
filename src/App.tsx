@@ -6,7 +6,6 @@ import LogoSvg from './logo.svg'
 
 import './App.css'
 
-
 function App() {
   return (
     <div className="App">
@@ -29,6 +28,7 @@ function App() {
             header="Panel 3"
             footer="The footer of Panel 3"
           ></Panel>
+          {/* The <div> with key 4 will not be added on the board */}
           <div key="4">4</div>
         </GridBoard>
       </div>
