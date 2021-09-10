@@ -7,7 +7,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .App {
@@ -37,9 +37,22 @@ html {
   color: #ffffff;
 }
 
+.App-actions {
+  padding: 1rem .5rem;
+  text-align: left;
+
+}
+
+.App-actions button {
+  margin-right: 1rem;
+  padding: 3px 6px;
+  font-size: 1rem;
+}
+
 .App-dashboard {
-  height: calc(100vh - 50px);
+  height: calc(100vh - 50px - 55px);
   background-color: #f8f8f8;
+  overflow-y: auto;
 }
 
 .dashboard-panel {

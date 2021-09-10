@@ -17,4 +17,4 @@ export const CompnentName = {
   panel: `${COMPONENT_NAME}Panel`
 }
 
-export const isNullOrUndefined = value => value === null || value === undefined
+export const isNullOrUndefined = (value:any) => value === null || value === undefined

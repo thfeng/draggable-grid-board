@@ -1,19 +1,15 @@
-import React, { ReactNode } from 'react'
-import { Responsive, WidthProvider } from 'react-grid-layout'
-import { Panel } from '.'
+import React, { ReactElement, ReactNode } from 'react'
+import GridLayout, { Responsive, WidthProvider } from 'react-grid-layout'
+import PanelNode from './PanelNode'
 
-import { GridBoardProps } from './types'
+import { GridBoardProps, ResponsiveGridBoardProps, PanelWrapperProps, GridBoardCommonProps } from './types'
 import { CompnentName, isNullOrUndefined } from './utils'
 
-const DefaultGridBoardProps: GridBoardProps = {
+const DefaultGridBoardCommonProps: GridBoardCommonProps = {
   className: '',
-  breakpoints: {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0},
-  cols: {lg: 6, md: 4, sm: 2, xs: 1, xxs: 1},
   draggableCancel: '',
   draggableHandle: '',
   compactType: 'vertical',
-  margin: [10, 10],
-  containerPadding: [10, 10],
   autoSize: true,
   rowHeight: 150,
   isDraggable: true,
@@ -22,8 +18,7 @@ const DefaultGridBoardProps: GridBoardProps = {
   isDroppable: false,
   preventCollision: false,
   resizeHandles: ['se'],
-  resizeHandle: null,
-  onLayoutChange: () => {},
+  resizeHandle: undefined,
   onDragStart: () => {},
   onDrag: () => {},
   onDragStop: () => {},
@@ -40,14 +35,27 @@ const DefaultGridBoardProps: GridBoardProps = {
   onDrop: () => {},
 }
 
+const DefaultGridBoardProps = Object.assign(DefaultGridBoardCommonProps, {
+  cols: 12,
+  margin: [10, 10],
+  containerPadding: [10, 10],
+  onLayoutChange: () => {}
+})
+const DefaultGridResponsiveBoardProps = Object.assign(DefaultGridBoardCommonProps, {
+  cols: { lg: 6, md: 4, sm: 2, xs: 1, xxs: 1 },
+  breakpoints: {lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0},
+  margin: [10, 10],
+  containerPadding: [10, 10],
+  onLayoutChange: () => {},
+})
+
 const componentClassName = 'se-ds-draggable-grid-board'
 
 const ResponsiveGridLayout = WidthProvider(Responsive)
 
-const GridBoard: React.FC<GridBoardProps> = (props) => {
-  const layoutProps = Object.assign(DefaultGridBoardProps, props)
+const GridBoard: React.FC<GridBoardProps & ResponsiveGridBoardProps> = (props) => {
   
-  const validateChild = (child) => {
+  const validateChild = (child: ReactElement<PanelWrapperProps, any>) => {
     const {
       key,
       props: {
@@ -70,7 +78,7 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
     return true
   }
 
-  const processItems = (child) => {
+  const processItems = (child: ReactElement<PanelWrapperProps, any>) => {
 
     if(!validateChild(child)) return null
 
@@ -101,26 +109,47 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
     }
     return (
       <div key={key} data-grid={dataGrid}>
-        <Panel {...restProps} />
+        <PanelNode {...restProps} />
       </div>
     )
   }
 
-  const renderPanels = (children: ReactNode):ReactNode[] => {
-    return React.Children.map(children, child => processItems(child))
+  const renderPanels = (children: ReactNode) => {
+    return React.Children.map(children as ReactElement<PanelWrapperProps>, (child) => processItems(child))
   }
 
-  return (
-    <ResponsiveGridLayout
-      measureBeforeMount
-      {...layoutProps}
-      className={`${componentClassName} ${layoutProps.className}`}
-    >
-      {
-        renderPanels(props.children)
-      }
-    </ResponsiveGridLayout>
-  )
+  const renderGridBoard = () => {
+    const layoutProps: GridBoardProps = Object.assign(DefaultGridBoardProps, props)
+
+    return (
+      <GridLayout
+        {...layoutProps}
+        className={`${componentClassName} ${layoutProps.className}`}
+      >
+        {
+          renderPanels(props.children)
+        }
+      </GridLayout>
+    )
+  }
+
+  const renderResponsiveGridBoard = () => {
+    const layoutProps: ResponsiveGridBoardProps = Object.assign(DefaultGridResponsiveBoardProps, props)
+
+    return (
+      <ResponsiveGridLayout
+        measureBeforeMount
+        {...layoutProps}
+        className={`${componentClassName} ${layoutProps.className}`}
+      >
+        {
+          renderPanels(props.children)
+        }
+      </ResponsiveGridLayout>
+    )
+  }
+
+  return props.useResponsive ? renderResponsiveGridBoard() : renderGridBoard()
 }
 
 export default GridBoard
