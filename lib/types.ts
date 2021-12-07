@@ -1,5 +1,5 @@
 import { CSSProperties, ReactElement } from 'react';
-import { ReactGridLayoutProps, ResponsiveProps, WidthProviderProps, CoreProps } from 'react-grid-layout'
+import { ReactGridLayoutProps, CoreProps } from 'react-grid-layout'
 
 export type LayoutItem = {
   w: number,
@@ -32,6 +32,7 @@ export interface GridBoardProps extends CoreProps, ReactGridLayoutProps {
   showSkeleton?: boolean
   rows: number
   cols: number
+  colWidth?: number
 }
 
 export interface PanelWrapperProps extends PanelProps {
@@ -50,6 +51,7 @@ export interface GridSkeletonProps {
   style?: CSSProperties
   cols: number
   rows: number
+  padding: [number, number]
 }
 
 export interface SkeletonBlockProps {

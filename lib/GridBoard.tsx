@@ -5,56 +5,10 @@ import GridSkeleton from './GridSkeleton';
 import { GridBoardProps, PanelWrapperProps } from './types'
 import { ClassNames, CompnentName, isNullOrUndefined } from './utils'
 
-const DefaultGridBoardProps: GridBoardProps = {
-  className: '',
-  cols: 12,
-  rows: 12,
-  draggableCancel: '',
-  draggableHandle: '',
-  compactType: 'vertical',
-  autoSize: true,
-  rowHeight: 150,
-  margin: [10, 10],
-  containerPadding: [10, 10],
-  isDraggable: true,
-  isResizable: true,
-  isBounded: true,
-  isDroppable: false,
-  preventCollision: false,
-  resizeHandles: ['se'],
-  resizeHandle: undefined,
-  onDragStart: () => {},
-  onDrag: () => {},
-  onDragStop: () => {},
-  onResizeStart: () => {},
-  onResize: (layout,
-    oldItem,
-    newItem,
-    placeholder,
-    event,
-    element) => {
-      console.log(layout, oldItem, newItem, placeholder, event, element)
-    },
-  onResizeStop: () => {},
-  onDrop: () => {},
-  onLayoutChange: () => {}
-}
-
-const DefaultGridBoardState: GridBoardState = {
-  width: 1200
-}
-
 const GridBoard: React.FC<GridBoardProps> = (props) => {
-
-  const gridBoardRef = useRef<HTMLDivElement>();
-  const [width, setWidth] = useState(DefaultGridBoardState.width);
-
-  useEffect(() => {
-    if (gridBoardRef.current) {
-      console.log(gridBoardRef.current)
-      setWidth(gridBoardRef.current.scrollWidth)
-    }
-  }, [gridBoardRef])
+  const width = (props.containerPadding as [number, number])[0] * 2 + (props.colWidth as number + (props.margin as [number, number])[0] * 2) * props.cols;
+  console.log(width)
+  const [boardWidth] = useState(width);
   
   const validateChild = (child: ReactElement<PanelWrapperProps, any>) => {
     const {
@@ -119,17 +73,20 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
     return React.Children.map(children as ReactElement<PanelWrapperProps>, (child) => processItems(child))
   }
 
-  const renderGridBoard = () => {
-    const layoutProps: GridBoardProps = Object.assign(DefaultGridBoardProps, props)
-
-    return (
-      <div className={`${ClassNames.board} ${layoutProps.className}`} ref={gridBoardRef}>
+  const renderGridBoard = () => (
+      <div className={`${ClassNames.board} ${props.className}`}>
         {
-          layoutProps.showSkeleton && <GridSkeleton className={`${layoutProps.skeletonClassName}`} cols={layoutProps.cols} rows={layoutProps.rows} />
+          props.showSkeleton &&
+            <GridSkeleton
+              className={`${props.skeletonClassName}`}
+              cols={props.cols}
+              rows={props.rows}
+              padding={props.containerPadding || [10, 10]}
+            />
         }
         <GridLayout
-          {...layoutProps}
-          width={width}
+          {...props}
+          width={boardWidth}
           className={`${ClassNames.layout}`}
           >
           {
@@ -138,9 +95,45 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
         </GridLayout>
       </div>
     )
-  }
 
   return renderGridBoard()
+}
+
+GridBoard.defaultProps = {
+  className: '',
+  cols: 12,
+  rows: 12,
+  rowHeight: 72,
+  colWidth: 112,
+  draggableCancel: '',
+  draggableHandle: '',
+  compactType: 'vertical',
+  autoSize: true,
+  margin: [12, 12],
+  containerPadding: [12, 12],
+  isDraggable: true,
+  isResizable: true,
+  isBounded: true,
+  isDroppable: false,
+  preventCollision: false,
+  resizeHandles: ['se'],
+  resizeHandle: undefined,
+  skeletonClassName: '',
+  onDragStart: () => {},
+  onDrag: () => {},
+  onDragStop: () => {},
+  onResizeStart: () => {},
+  onResize: (layout,
+    oldItem,
+    newItem,
+    placeholder,
+    event,
+    element) => {
+      console.log(layout, oldItem, newItem, placeholder, event, element)
+    },
+  onResizeStop: () => {},
+  onDrop: () => {},
+  onLayoutChange: () => {}
 }
 
 export default GridBoard

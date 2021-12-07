@@ -9,7 +9,7 @@ const skeletonBlockClassName = `${ClassNames.skeleton}-block`;
 const Block: React.FC<SkeletonBlockProps> = ({ className = '', style }) => <div className={`${skeletonBlockClassName} ${className}`} style={style}></div>
 
 const GridSkeleton: React.FC<GridSkeletonProps> = (props) => {
-  const { cols = 0, rows = 0 } = props;
+  const { cols = 0, rows = 0, padding: [paddingX, paddingY]} = props;
 
   const [row, updateRow] = useState(Array(rows).fill(0));
   const [col, updateCol] = useState(Array(cols).fill(0));
@@ -24,7 +24,7 @@ const GridSkeleton: React.FC<GridSkeletonProps> = (props) => {
   }, [props])
 
   return (
-    <div className={`${props.className || ''} ${skeletonClassName}`}>
+    <div className={`${props.className || ''} ${skeletonClassName}`} style={{padding: `${paddingY}px ${paddingX}px`}}>
       {
         row.map((r, rIndex) => <div className={skeletonRowClassName} key={`${rIndex}`}>
           {
