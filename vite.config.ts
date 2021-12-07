@@ -7,7 +7,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'lib/index.ts'),
-      name: 'DraggableGridBoard'
+      name: 'GridBoard'
     },
     rollupOptions: {
       external: ['react', 'react-dom'],

@@ -1,5 +1,5 @@
 {
-  "name": "@se-ds/draggable-grid-board",
+  "name": "@se-ds/grid-board",
   "version": "0.0.1-alpha",
   "description": "A draggable grid board component in React.js",
   "keywords": [
@@ -13,32 +13,29 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/draggable-grid-board.umd.js",
-  "module": "./dist/draggable-grid-board.es.js",
+  "main": "./dist/grid-board.umd.js",
+  "module": "./dist/grid-board.es.js",
   "exports": {
     ".": {
-      "import": "./dist/draggable-grid-board.es.js",
-      "require": "./dist/draggable-grid-board.umd.js"
+      "import": "./dist/grid-board.es.js",
+      "require": "./dist/grid-board.umd.js"
     }
   },
   "scripts": {
     "dev": "vite",
+    "start": "npm run dev",
     "build": "vite build",
-    "serve": "vite preview",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "serve": "vite preview"
   },
   "dependencies": {
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
     "react-grid-layout": "^1.2.5"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.8",
-    "@storybook/addon-actions": "^6.4.0-alpha.33",
-    "@storybook/addon-essentials": "^6.4.0-alpha.33",
-    "@storybook/addon-links": "^6.4.0-alpha.33",
-    "@storybook/react": "^6.4.0-alpha.33",
     "@types/node": "^16.3.3",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",

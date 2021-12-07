@@ -25,13 +25,15 @@ export type ReactRef<T> = {
   current: T | null
 }
 
-export interface GridBoardCommonProps extends CoreProps {
-  useResponsive?: boolean
+export interface GridBoardProps extends CoreProps, ReactGridLayoutProps {
+  className?: string
+  style?: CSSProperties
+  skeletonClassName?: string
+  showSkeleton?: boolean
+  rows: number
+  cols: number
 }
 
-export interface GridBoardProps extends GridBoardCommonProps, ReactGridLayoutProps {}
-
-export interface ResponsiveGridBoardProps extends GridBoardCommonProps, ResponsiveProps, WidthProviderProps {}
 export interface PanelWrapperProps extends PanelProps {
   posX: number
   posY: number
@@ -41,6 +43,18 @@ export interface PanelWrapperProps extends PanelProps {
   minWidth?: number,
   isDraggable?: boolean,
   isResizable?: boolean,
+}
+
+export interface GridSkeletonProps {
+  className?: string
+  style?: CSSProperties
+  cols: number
+  rows: number
+}
+
+export interface SkeletonBlockProps {
+  className?: string
+  style?: CSSProperties
 }
 
 export interface PanelProps {

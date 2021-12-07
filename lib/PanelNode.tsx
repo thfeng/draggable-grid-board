@@ -7,7 +7,7 @@ import PanelFooter from './PanelFooter'
 
 const panelClassName = ClassNames.panel
 const panelContentClassName = ClassNames.panelContent
-const draggableHandleClassName = ClassNames.draggableHandle
+const draggableHandleClassName = ClassNames.handler
 
 const PanelNode: React.FC<PanelProps> = (props) => {
 

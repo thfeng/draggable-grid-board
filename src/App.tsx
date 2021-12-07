@@ -22,14 +22,20 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>se-ds-dashboard</h1>
+        <h1>grid-board</h1>
       </header>
       <div className="App-actions">
         <button className="reset-btn" onClick={handleClickReset}>Reset</button>
         <button className="create-btn" onClick={handleClickCreate}>New Panel</button>
       </div>
       <div className="App-dashboard">
-        <GridBoard className="dashboard-layout" useResponsive>
+        <GridBoard
+          className="dashboard-layout"
+          showSkeleton
+          cols={24}
+          rows={24}
+          onLayoutChange={(layout) => console.log(layout)}
+        >
           <Panel className="dashboard-panel" key="1" posX={0} posY={0} width={4} height={2}>
             <img src={LogoSvg} width="200" height="200" />
           </Panel>

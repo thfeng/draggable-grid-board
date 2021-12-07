@@ -1,4 +1,9 @@
-.se-ds-draggable-grid-board {
+.grid-board {
+  position: relative;
+
+  &-layout {
+    
+  }
 
   &-panel {
     display: flex;
@@ -21,6 +26,28 @@
     &-footer {
       padding: 6px 10px;
       border-top: 1px solid #dbdbdb;
+    }
+  }
+
+  &-skeleton {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    &-row {
+      font-size: 0;
+      margin-bottom: 24px;
+      height: 72px;
+      white-space: nowrap;
+    }
+
+    &-block {
+      display: inline-block;
+      width: 112px;
+      height: 72px;
+      margin-right: 24px;
+      border-radius: 8px;
+      background-color: #e7ebee;
     }
   }
 }
