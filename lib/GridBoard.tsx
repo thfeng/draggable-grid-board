@@ -6,7 +6,7 @@ import { GridBoardProps, PanelWrapperProps } from './types'
 import { ClassNames, CompnentName, isNullOrUndefined } from './utils'
 
 const GridBoard: React.FC<GridBoardProps> = (props) => {
-  const width = (props.containerPadding as [number, number])[0] * 2 + (props.colWidth as number + (props.margin as [number, number])[0] * 2) * props.cols;
+  const width = (props.containerPadding as [number, number])[0] * 2 + (props.colWidth as number + (props.margin as [number, number])[0]) * props.cols;
   console.log(width)
   const [boardWidth] = useState(width);
   
@@ -109,7 +109,7 @@ GridBoard.defaultProps = {
   draggableHandle: '',
   compactType: 'vertical',
   autoSize: true,
-  margin: [12, 12],
+  margin: [24, 24],
   containerPadding: [12, 12],
   isDraggable: true,
   isResizable: true,
