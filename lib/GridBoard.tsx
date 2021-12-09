@@ -5,8 +5,12 @@ import GridSkeleton from './GridSkeleton';
 import { GridBoardProps, PanelWrapperProps } from './types'
 import { ClassNames, CompnentName, isNullOrUndefined } from './utils'
 
+const calculateWidth = (containerPadding: number, colWidth: number, colMargin: number, cols: number):number => {
+  return containerPadding * 2 + colWidth * cols + colMargin * (cols - 1);
+}
+
 const GridBoard: React.FC<GridBoardProps> = (props) => {
-  const width = (props.containerPadding as [number, number])[0] * 2 + (props.colWidth as number + (props.margin as [number, number])[0]) * props.cols;
+  const width = calculateWidth((props.containerPadding as [number, number])[0], props.colWidth as number, (props.margin as [number, number])[0], props.cols);
   console.log(width)
   const [boardWidth] = useState(width);
   
