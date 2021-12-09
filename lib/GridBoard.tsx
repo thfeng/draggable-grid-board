@@ -9,11 +9,14 @@ const calculateWidth = (containerPadding: number, colWidth: number, colMargin: n
   return containerPadding * 2 + colWidth * cols + colMargin * (cols - 1);
 }
 
+const calculateHeight = (containerPadding: number, colWidth: number, colMargin: number, rows: number):number => {
+  return containerPadding * 2 + colWidth * rows + colMargin * (rows - 1);
+}
+
 const GridBoard: React.FC<GridBoardProps> = (props) => {
-  const width = calculateWidth((props.containerPadding as [number, number])[0], props.colWidth as number, (props.margin as [number, number])[0], props.cols);
-  console.log(width)
-  const [boardWidth] = useState(width);
-  
+  const boardWidth = calculateWidth((props.containerPadding as [number, number])[0], props.colWidth as number, (props.margin as [number, number])[0], props.cols);
+  const boardHeight = props.autoSize ? 'auto' : calculateHeight((props.containerPadding as [number, number])[1], props.rowHeight as number, (props.margin as [number, number])[1], props.rows)
+
   const validateChild = (child: ReactElement<PanelWrapperProps, any>) => {
     const {
       key,
@@ -92,6 +95,9 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
           {...props}
           width={boardWidth}
           className={`${ClassNames.layout}`}
+          style={{
+            height: boardHeight
+          }}
           >
           {
             renderPanels(props.children)
@@ -111,8 +117,8 @@ GridBoard.defaultProps = {
   colWidth: 112,
   draggableCancel: '',
   draggableHandle: '',
-  compactType: 'vertical',
-  autoSize: true,
+  compactType: null,
+  autoSize: false,
   margin: [24, 24],
   containerPadding: [12, 12],
   isDraggable: true,
