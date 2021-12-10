@@ -1,6 +1,10 @@
 .grid-board {
   position: relative;
 
+  &-progressive-expand {
+    overflow: hidden;
+  }
+
   &-layout {
     
   }

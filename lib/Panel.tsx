@@ -1,10 +1,10 @@
 import React from 'react'
 
 import { PanelWrapperProps } from './types'
-import { CompnentName } from './utils';
+import { ComponentName } from './utils';
 
 const Panel: React.FC<PanelWrapperProps> = () => <></>
 
-Panel.displayName = CompnentName.panel
+Panel.displayName = ComponentName.panel
 
 export default Panel

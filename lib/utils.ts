@@ -4,6 +4,7 @@ export const ClassNames = {
   board: COMPONENT_CLASSNAME,
   layout: `${COMPONENT_CLASSNAME}-layout`,
   skeleton: `${COMPONENT_CLASSNAME}-skeleton`,
+  progressiveExpand: `${COMPONENT_CLASSNAME}-progressive-expand`,
   panel: `${COMPONENT_CLASSNAME}-panel`,
   panelHeader: `${COMPONENT_CLASSNAME}-panel-header`,
   panelContent: `${COMPONENT_CLASSNAME}-panel-content`,
@@ -13,7 +14,7 @@ export const ClassNames = {
 
 const COMPONENT_NAME = "@SEDS/GridBoard"
 
-export const CompnentName = {
+export const ComponentName = {
   component: COMPONENT_NAME,
   panel: `${COMPONENT_NAME}Panel`
 }

@@ -1,5 +1,5 @@
 import { CSSProperties, ReactElement } from 'react';
-import { ReactGridLayoutProps, CoreProps } from 'react-grid-layout'
+import ReactGridLayout, { ReactGridLayoutProps, CoreProps } from 'react-grid-layout'
 
 export type LayoutItem = {
   w: number,
@@ -19,6 +19,8 @@ export type LayoutItem = {
   isBounded?: boolean
 }
 
+export type LayoutItemCallback = ReactGridLayout.ItemCallback
+
 export type ResizeHandleAxis = | "s"| "w"| "e"| "n"| "sw"| "nw"| "se"| "ne";
 
 export type ReactRef<T> = {
@@ -33,6 +35,7 @@ export interface GridBoardProps extends CoreProps, ReactGridLayoutProps {
   rows: number
   cols: number
   colWidth?: number
+  progressiveExpand?: [12, 12]
 }
 
 export interface PanelWrapperProps extends PanelProps {

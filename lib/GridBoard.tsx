@@ -1,9 +1,9 @@
-import React, { ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
-import GridLayout from 'react-grid-layout'
-import PanelNode from './PanelNode'
+import React, { CSSProperties, ReactElement, ReactNode, useEffect, useRef, useState } from 'react';
+import GridLayout from 'react-grid-layout';
+import PanelNode from './PanelNode';
 import GridSkeleton from './GridSkeleton';
-import { GridBoardProps, PanelWrapperProps } from './types'
-import { ClassNames, CompnentName, isNullOrUndefined } from './utils'
+import { GridBoardProps, LayoutItem, PanelWrapperProps } from './types'
+import { ClassNames, ComponentName, isNullOrUndefined } from './utils'
 
 const calculateWidth = (containerPadding: number, colWidth: number, colMargin: number, cols: number):number => {
   return containerPadding * 2 + colWidth * cols + colMargin * (cols - 1);
@@ -14,8 +14,18 @@ const calculateHeight = (containerPadding: number, colWidth: number, colMargin: 
 }
 
 const GridBoard: React.FC<GridBoardProps> = (props) => {
-  const boardWidth = calculateWidth((props.containerPadding as [number, number])[0], props.colWidth as number, (props.margin as [number, number])[0], props.cols);
-  const boardHeight = props.autoSize ? 'auto' : calculateHeight((props.containerPadding as [number, number])[1], props.rowHeight as number, (props.margin as [number, number])[1], props.rows)
+
+  const containerPadding = props.containerPadding as [number, number];
+  const margin = props.margin as [number, number];
+  const boardWidth = calculateWidth(containerPadding[0], props.colWidth as number, margin[0], props.cols);
+  const boardHeight = props.autoSize ? 'auto' : calculateHeight(containerPadding[1], props.rowHeight as number, margin[1], props.rows)
+
+  const gridBoardStyle = ():CSSProperties | undefined => props.progressiveExpand ? {
+      width: calculateWidth(containerPadding[0], props.colWidth as number, margin[0], props.progressiveExpand[0]),
+      height: calculateHeight(containerPadding[1], props.rowHeight as number, margin[1], props.progressiveExpand[1])
+    } as CSSProperties : undefined
+
+  const [progressiveStyle, updateProgressStyle] = useState(gridBoardStyle());
 
   const validateChild = (child: ReactElement<PanelWrapperProps, any>) => {
     const {
@@ -30,7 +40,7 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
         displayName
       }
     } = child
-    if (displayName !== CompnentName.panel) {
+    if (displayName !== ComponentName.panel) {
       return false
     }
     if (isNullOrUndefined(key) || isNullOrUndefined(posX) || isNullOrUndefined(posY) || isNullOrUndefined(width) || isNullOrUndefined(height)) {
@@ -76,12 +86,23 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
     )
   }
 
+  const handleDrag = (layouts: LayoutItem[], oldItem: LayoutItem, newItem: LayoutItem, placeholder: LayoutItem, event: MouseEvent, element: HTMLElement): GridBoardProps => {
+    console.log(layouts, placeholder, event, element)
+
+    if (props && typeof props.onDrag === 'function') {
+      props.onDrag(layouts, oldItem, newItem, placeholder, event, element)
+    }
+  }
+
   const renderPanels = (children: ReactNode) => {
     return React.Children.map(children as ReactElement<PanelWrapperProps>, (child) => processItems(child))
   }
 
   const renderGridBoard = () => (
-      <div className={`${ClassNames.board} ${props.className}`}>
+      <div
+        className={`${ClassNames.board} ${props.className} ${props.progressiveExpand ? ClassNames.progressiveExpand : ''}`}
+        style={progressiveStyle}
+      >
         {
           props.showSkeleton &&
             <GridSkeleton
@@ -95,6 +116,7 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
           {...props}
           width={boardWidth}
           className={`${ClassNames.layout}`}
+          onDrag={handleDrag}
           style={{
             height: boardHeight
           }}
@@ -115,6 +137,7 @@ GridBoard.defaultProps = {
   rows: 12,
   rowHeight: 72,
   colWidth: 112,
+  progressiveExpand: [12, 12],
   draggableCancel: '',
   draggableHandle: '',
   compactType: null,
