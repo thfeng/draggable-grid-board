@@ -20,12 +20,12 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
   const boardWidth = calculateWidth(containerPadding[0], props.colWidth as number, margin[0], props.cols);
   const boardHeight = props.autoSize ? 'auto' : calculateHeight(containerPadding[1], props.rowHeight as number, margin[1], props.rows)
 
-  const gridBoardStyle = ():CSSProperties | undefined => props.progressiveExpand ? {
-      width: calculateWidth(containerPadding[0], props.colWidth as number, margin[0], props.progressiveExpand[0]),
-      height: calculateHeight(containerPadding[1], props.rowHeight as number, margin[1], props.progressiveExpand[1])
+  const gridBoardStyle = (progressiveExpand: [number, number]):CSSProperties | undefined => progressiveExpand ? {
+      width: calculateWidth(containerPadding[0], props.colWidth as number, margin[0], progressiveExpand[0]),
+      height: calculateHeight(containerPadding[1], props.rowHeight as number, margin[1], progressiveExpand[1])
     } as CSSProperties : undefined
 
-  const [progressiveStyle, updateProgressStyle] = useState(gridBoardStyle());
+  const [progressiveStyle, updateProgressStyle] = useState(gridBoardStyle(props.progressiveExpand as [number, number]));
 
   const validateChild = (child: ReactElement<PanelWrapperProps, any>) => {
     const {
@@ -86,8 +86,10 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
     )
   }
 
-  const handleDrag = (layouts: LayoutItem[], oldItem: LayoutItem, newItem: LayoutItem, placeholder: LayoutItem, event: MouseEvent, element: HTMLElement): GridBoardProps => {
-    console.log(layouts, placeholder, event, element)
+  const handleDrag = (layouts: LayoutItem[], oldItem: LayoutItem, newItem: LayoutItem, placeholder: LayoutItem, event: MouseEvent, element: HTMLElement): void => {
+    if (props.progressiveExpand) {
+      const { x, y } = placeholder
+    }
 
     if (props && typeof props.onDrag === 'function') {
       props.onDrag(layouts, oldItem, newItem, placeholder, event, element)
