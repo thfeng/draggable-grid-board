@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactElement, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, MutableRefObject, ReactElement, ReactNode, useRef, useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import PanelNode from './PanelNode';
 import GridSkeleton from './GridSkeleton';
@@ -13,12 +13,31 @@ const calculateHeight = (containerPadding: number, colWidth: number, colMargin: 
   return containerPadding * 2 + colWidth * rows + colMargin * (rows - 1);
 }
 
+const calculateProgressiveView = (layoutItem: LayoutItem, layoutItems: LayoutItem[],  progressiveExpandConfig: [number, number]): [number, number] => {
+  let maxX = progressiveExpandConfig[0], maxY = progressiveExpandConfig[1]
+  layoutItems.forEach((item) => {
+    if (item.x + item.w > maxX) {
+      maxX = item.x + item.w
+    }
+    if (item.y + item.h > maxY) {
+      maxY = item.y + item.h
+    }
+  })
+  
+  const { x, y, w, h } = layoutItem
+  const newViewX = x + w > maxX ? x + w : maxX
+  const newViewY = y + h > maxY ? y + h : maxY
+  return [newViewX, newViewY]
+}
+
 const GridBoard: React.FC<GridBoardProps> = (props) => {
 
   const containerPadding = props.containerPadding as [number, number];
   const margin = props.margin as [number, number];
   const boardWidth = calculateWidth(containerPadding[0], props.colWidth as number, margin[0], props.cols);
   const boardHeight = props.autoSize ? 'auto' : calculateHeight(containerPadding[1], props.rowHeight as number, margin[1], props.rows)
+  const progressiveExpandCols = useRef(props.progressiveExpand ? props.progressiveExpand[0] : props.cols)
+  const progressiveExpandRows = useRef(props.progressiveExpand ? props.progressiveExpand[1] : props.rows)
 
   const gridBoardStyle = (progressiveExpand: [number, number]):CSSProperties | undefined => progressiveExpand ? {
       width: calculateWidth(containerPadding[0], props.colWidth as number, margin[0], progressiveExpand[0]),
@@ -87,12 +106,42 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
   }
 
   const handleDrag = (layouts: LayoutItem[], oldItem: LayoutItem, newItem: LayoutItem, placeholder: LayoutItem, event: MouseEvent, element: HTMLElement): void => {
+    console.log(oldItem, newItem, placeholder)
     if (props.progressiveExpand) {
-      const { x, y } = placeholder
+      const [cols, rows] = calculateProgressiveView(newItem, layouts, props.progressiveExpand)
+      progressiveExpandCols.current = cols > progressiveExpandCols.current ? cols : progressiveExpandCols.current
+      progressiveExpandRows.current = rows > progressiveExpandRows.current ? rows : progressiveExpandRows.current
+      const newProgressiveStyle = gridBoardStyle([progressiveExpandCols.current, progressiveExpandRows.current])
+      if (newProgressiveStyle?.width !== progressiveStyle?.width || newProgressiveStyle?.height !== progressiveStyle?.height) {
+        updateProgressStyle(newProgressiveStyle)
+      }
     }
 
     if (props && typeof props.onDrag === 'function') {
       props.onDrag(layouts, oldItem, newItem, placeholder, event, element)
+    }
+  }
+
+  const handleDragStop = (layouts: LayoutItem[], oldItem: LayoutItem, newItem: LayoutItem, placeholder: LayoutItem, event: MouseEvent, element: HTMLElement): void => {
+    console.log('handleDragStop', oldItem, newItem, placeholder)
+    if (props.progressiveExpand) {
+      const [cols, rows] = calculateProgressiveView(newItem, layouts, props.progressiveExpand)
+      const newProgressiveStyle = gridBoardStyle([cols, rows])
+      progressiveExpandCols.current = cols
+      progressiveExpandRows.current = rows
+      if (newProgressiveStyle?.width !== progressiveStyle?.width || newProgressiveStyle?.height !== progressiveStyle?.height) {
+        updateProgressStyle(newProgressiveStyle)
+      }
+    }
+
+    if (props && typeof props.onDragStop === 'function') {
+      props.onDragStop(layouts, oldItem, newItem, placeholder, event, element)
+    }
+  }
+
+  const handleLayoutChange = (layouts: LayoutItem[]): void => {
+    if (props && typeof props.onLayoutChange === 'function') {
+      props.onLayoutChange(layouts)
     }
   }
 
@@ -119,6 +168,8 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
           width={boardWidth}
           className={`${ClassNames.layout}`}
           onDrag={handleDrag}
+          onDragStop={handleDragStop}
+          onLayoutChange={handleLayoutChange}
           style={{
             height: boardHeight
           }}
