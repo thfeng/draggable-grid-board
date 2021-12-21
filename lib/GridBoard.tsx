@@ -1,4 +1,4 @@
-import React, { CSSProperties, MutableRefObject, ReactElement, ReactNode, useRef, useState } from 'react';
+import React, { CSSProperties, ReactElement, ReactNode, useRef, useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import PanelNode from './PanelNode';
 import GridSkeleton from './GridSkeleton';
@@ -123,7 +123,6 @@ const GridBoard: React.FC<GridBoardProps> = (props) => {
   }
 
   const handleDragStop = (layouts: LayoutItem[], oldItem: LayoutItem, newItem: LayoutItem, placeholder: LayoutItem, event: MouseEvent, element: HTMLElement): void => {
-    console.log('handleDragStop', oldItem, newItem, placeholder)
     if (props.progressiveExpand) {
       const [cols, rows] = calculateProgressiveView(newItem, layouts, props.progressiveExpand)
       const newProgressiveStyle = gridBoardStyle([cols, rows])
