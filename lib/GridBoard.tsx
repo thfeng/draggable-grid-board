@@ -221,4 +221,4 @@ GridBoard.defaultProps = {
   onLayoutChange: () => {}
 }
 
-export default GridBoard
+export default GridBoard;
