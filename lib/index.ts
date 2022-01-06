@@ -1,6 +1,4 @@
-import GridBoard from './GridBoard'
-import Panel from './Panel'
+export { default as GridBoard } from './GridBoard'
+export { default as Panel } from './Panel'
 
 import '../styles/style.scss'
-
-export { GridBoard, Panel }
